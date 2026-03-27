@@ -14,8 +14,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/Gogolook-Inc/trustall-android-sdk")
             credentials {
-                username = System.getenv("github_actor") ?: extra["github_actor"] as? String ?: ""
-                password = System.getenv("github_token") ?: extra["github_token"] as? String ?: ""
+                username = System.getenv("GITHUB_ACTOR") ?: extra["github_actor"] as? String ?: ""
+                password = System.getenv("GITHUB_TOKEN") ?: extra["github_token"] as? String ?: ""
             }
         }
         mavenLocal()
