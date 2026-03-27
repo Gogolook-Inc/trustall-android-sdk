@@ -1,0 +1,104 @@
+[versions]
+compileSdk = "35"
+minSdk = "29"
+targetSdk = "35"
+agp = "8.7.3"
+androidTools = "31.3.0"
+androidxDataStore = "1.0.0"
+annotation = "1.7.1"
+appcompat = "1.7.0"
+androidxComposeBom = "2024.04.01"
+androidxComposeCompiler = "1.5.15"
+
+androidxActivity = "1.10.0"
+coreKtx = "1.15.0"
+coreSplashscreen = "1.0.1"
+espressoCore = "3.6.1"
+jacoco = "0.8.7"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+kotlin = "1.9.25"
+ksp = "1.9.25-1.0.20"
+lifecycleRuntimeKtx = "2.8.7"
+mockk = "1.13.11"
+navigationCompose = "2.4.2"
+truth = "1.4.2"
+lifecycle = "2.8.7"
+room = "2.6.1"
+secrets = "2.0.1"
+trustallBom = "2026.03.01"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivity" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
+androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-icon-core = { group = "androidx.compose.material", name = "material-icons-core-android" }
+androidx-material-icon-extended = { group = "androidx.compose.material", name = "material-icons-extended-android" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "lifecycleRuntimeKtx" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+
+# trustall SDK
+trustall-bom = { group = "com.gogolook.trustall", name = "trustall-bom", version.ref = "trustallBom" }
+trustall-core = { group = "com.gogolook.trustall", name = "trustall-core" }
+trustall-auth = { group = "com.gogolook.trustall", name = "trustall-auth" }
+trustall-callerid = { group = "com.gogolook.trustall", name = "trustall-callerid" }
+trustall-calllog = { group = "com.gogolook.trustall", name = "trustall-calllog" }
+trustall-contact = { group = "com.gogolook.trustall", name = "trustall-contact" }
+trustall-msgfilter = { group = "com.gogolook.trustall", name = "trustall-msgfilter" }
+trustall-network = { group = "com.gogolook.trustall", name = "trustall-network" }
+trustall-network-production = { group = "com.gogolook.trustall.network", name = "production" }
+trustall-numberblock = { group = "com.gogolook.trustall", name = "trustall-numberblock" }
+trustall-numbersearch = { group = "com.gogolook.trustall", name = "trustall-numbersearch" }
+trustall-offlinedb = { group = "com.gogolook.trustall", name = "trustall-offlinedb" }
+trustall-permission = { group = "com.gogolook.trustall", name = "trustall-permission" }
+trustall-smslog = { group = "com.gogolook.trustall", name = "trustall-smslog" }
+trustall-urlscan = { group = "com.gogolook.trustall", name = "trustall-urlscan" }
+
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
+secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+
+# Plugins defined by build-logic
+trustall-android-library = { id = "trustall.android.library", version = "unspecified" }
+trustall-android-library-jacoco = { id = "trustall.android.library.jacoco", version = "unspecified" }
+trustall-android-library-compose = { id = "trustall.android.library.compose", version = "unspecified" }
+trustall-android-lint = { id = "trustall.android.lint", version = "unspecified" }
+trustall-android-room = { id = "trustall.android.room", version = "unspecified" }
+trustall-android-test = { id = "trustall.android.test", version = "unspecified" }
+trustall-maven-artifactory = { id = "trustall.maven.artifactory", version = "unspecified" }
