@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gogolook.trustall.callerid.model.NumberInfo
 import com.gogolook.trustall.core.Trustall
 import com.gogolook.trustall.msgfilter.model.FilterType
 import com.gogolook.trustall.smslog.model.SmsLog
@@ -103,7 +104,7 @@ fun SmsLogItemCard(item: SmsLogUiModel) {
     val info = item.numberInfo
     val filterType = item.filterType
 
-    val isSpamNumber = info != null && info.spamLevel > 0
+    val isSpamNumber = info?.spamLevel != NumberInfo.SpamLevel.NONE
     val isSpamMessage = filterType == FilterType.SPAM
     val isSpam = isSpamNumber || isSpamMessage
     

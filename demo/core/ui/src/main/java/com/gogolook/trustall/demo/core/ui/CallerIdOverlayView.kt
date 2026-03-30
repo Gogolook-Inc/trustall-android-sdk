@@ -36,7 +36,7 @@ fun CallerIdOverlayCard(
     number: String,
     onClose: () -> Unit
 ) {
-    val isSpam = (info?.spamLevel ?: 0) > 0
+    val isSpam = info?.spamLevel != NumberInfo.SpamLevel.NONE
     val cardColor = if (isSpam) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer
     val onCardColor = if (isSpam) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer
 

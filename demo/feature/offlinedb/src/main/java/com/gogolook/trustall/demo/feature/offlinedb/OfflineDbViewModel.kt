@@ -1,5 +1,6 @@
 package com.gogolook.trustall.demo.feature.offlinedb
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gogolook.trustall.core.Trustall
@@ -74,6 +75,7 @@ class OfflineDbViewModel : ViewModel() {
                     _uiState.value = _uiState.value.copy(searchError = "No offline data found for this number.")
                 }
             } catch (e: Exception) {
+                Log.e("OfflineDbViewModel", "Error searching offline database: ${e.message}", e)
                 _uiState.value = _uiState.value.copy(searchError = "Search failed: ${e.message}")
             } finally {
                 _uiState.value = _uiState.value.copy(isSearching = false)
