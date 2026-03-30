@@ -61,7 +61,9 @@ dependencies {
 
     implementation(platform(libs.trustall.bom))
     implementation(libs.trustall.core)
-    implementation(libs.trustall.network.production)
+//    implementation(libs.trustall.network.production)
+//    implementation(libs.trustall.network.sandbox)
+    implementation(libs.trustall.network.staging)
     implementation(libs.trustall.auth)
     implementation(libs.trustall.callerid)
     implementation(libs.trustall.numberblock)

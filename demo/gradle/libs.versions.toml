@@ -26,7 +26,7 @@ truth = "1.4.2"
 lifecycle = "2.8.7"
 room = "2.6.1"
 secrets = "2.0.1"
-trustallBom = "2026.03.01"
+trustallBom = "2026.03.02"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +70,8 @@ trustall-contact = { group = "com.gogolook.trustall", name = "trustall-contact" 
 trustall-msgfilter = { group = "com.gogolook.trustall", name = "trustall-msgfilter" }
 trustall-network = { group = "com.gogolook.trustall", name = "trustall-network" }
 trustall-network-production = { group = "com.gogolook.trustall.network", name = "production" }
+trustall-network-sandbox = { group = "com.gogolook.trustall.network", name = "sandbox" }
+trustall-network-staging = { group = "com.gogolook.trustall.network", name = "staging" }
 trustall-numberblock = { group = "com.gogolook.trustall", name = "trustall-numberblock" }
 trustall-numbersearch = { group = "com.gogolook.trustall", name = "trustall-numbersearch" }
 trustall-offlinedb = { group = "com.gogolook.trustall", name = "trustall-offlinedb" }

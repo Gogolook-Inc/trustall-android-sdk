@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.CloudUpload
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gogolook.trustall.callerid.model.NumberInfo
 import com.gogolook.trustall.calllog.model.CallType
 import com.gogolook.trustall.calllog.callLog
 import com.gogolook.trustall.core.Trustall
@@ -151,7 +152,7 @@ fun CallLogItemCard(item: CallLogUiModel, onUpload: () -> Unit) {
     val log = item.callLog
     val info = item.numberInfo
 
-    val isSpam = info != null && info.spamLevel > 0
+    val isSpam = info?.spamLevel != NumberInfo.SpamLevel.NONE
     val cardColor = if (isSpam) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant
 
     Card(

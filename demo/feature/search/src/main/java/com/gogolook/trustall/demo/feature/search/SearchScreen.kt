@@ -178,7 +178,11 @@ fun SearchScreen(viewModel: SearchViewModel = viewModel(), onNavigateToCallerId:
                                     name = r.name,
                                     bizCategory = r.bizCategory,
                                     spamCategory = r.spamCategory,
-                                    spamLevel = r.spamLevel,
+                                    spamLevel = when (r.spamLevel) {
+                                        OnlineNumberInfo.SpamLevel.NONE -> NumberInfo.SpamLevel.NONE
+                                        OnlineNumberInfo.SpamLevel.SUSPICIOUS -> NumberInfo.SpamLevel.SUSPICIOUS
+                                        OnlineNumberInfo.SpamLevel.TOP -> NumberInfo.SpamLevel.TOP
+                                    },
                                     isContact = false
                                 )
                                 overlay.show(MutableStateFlow(info), r.number)
