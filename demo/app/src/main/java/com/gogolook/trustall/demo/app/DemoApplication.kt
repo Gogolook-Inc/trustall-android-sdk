@@ -12,9 +12,7 @@ import com.gogolook.trustall.callerid.model.NumberInfoState
 import com.gogolook.trustall.core.Trustall
 import com.gogolook.trustall.core.auth.auth
 import com.gogolook.trustall.core.model.SdkConfig
-import com.gogolook.trustall.demo.app.BuildConfig
 import com.gogolook.trustall.demo.core.ui.CallerIdOverlay
-import com.gogolook.trustall.demo.core.util.isNetworkAvailable
 import com.gogolook.trustall.core.auth.model.AuthResult
 import com.gogolook.trustall.numberblock.numberBlock
 import kotlinx.coroutines.CoroutineScope

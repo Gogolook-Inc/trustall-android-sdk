@@ -104,7 +104,7 @@ fun SmsLogItemCard(item: SmsLogUiModel) {
     val info = item.numberInfo
     val filterType = item.filterType
 
-    val isSpamNumber = info?.spamLevel != NumberInfo.SpamLevel.NONE
+    val isSpamNumber = info?.spamLevel != NumberInfo.SpamLevel.UNLIKELY
     val isSpamMessage = filterType == FilterType.SPAM
     val isSpam = isSpamNumber || isSpamMessage
     
