@@ -152,7 +152,7 @@ fun CallLogItemCard(item: CallLogUiModel, onUpload: () -> Unit) {
     val log = item.callLog
     val info = item.numberInfo
 
-    val isSpam = info?.spamLevel != NumberInfo.SpamLevel.NONE
+    val isSpam = info?.spamLevel != NumberInfo.SpamLevel.UNLIKELY
     val cardColor = if (isSpam) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant
 
     Card(

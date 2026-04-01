@@ -179,9 +179,9 @@ fun SearchScreen(viewModel: SearchViewModel = viewModel(), onNavigateToCallerId:
                                     bizCategory = r.bizCategory,
                                     spamCategory = r.spamCategory,
                                     spamLevel = when (r.spamLevel) {
-                                        OnlineNumberInfo.SpamLevel.NONE -> NumberInfo.SpamLevel.NONE
+                                        OnlineNumberInfo.SpamLevel.UNLIKELY -> NumberInfo.SpamLevel.UNLIKELY
                                         OnlineNumberInfo.SpamLevel.SUSPICIOUS -> NumberInfo.SpamLevel.SUSPICIOUS
-                                        OnlineNumberInfo.SpamLevel.TOP -> NumberInfo.SpamLevel.TOP
+                                        OnlineNumberInfo.SpamLevel.CONFIRMED -> NumberInfo.SpamLevel.CONFIRMED
                                     },
                                     isContact = false
                                 )
