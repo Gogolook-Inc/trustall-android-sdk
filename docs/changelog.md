@@ -2,7 +2,46 @@
 
 ## Latest Version
 
-[trustall-bom `2026.04.01`](#trustall-bom-20260401)
+[trustall-bom `2026.07.01`](#trustall-bom-20260701)
+
+---
+
+## 2026.07.01 — July 16, 2026 {#trustall-bom-20260701}
+
+<details>
+<summary>Module versions in this BOM</summary>
+
+| Module | Version | Gradle Dependency |
+|--------|---------|-------------------|
+| `trustall-bom` | 2026.07.01 | `com.gogolook.trustall:trustall-bom` |
+| `trustall-core` | 2026.07.01 | `com.gogolook.trustall:trustall-core` |
+| `trustall-auth` | 1.0.1 | `com.gogolook.trustall:trustall-auth` |
+| `trustall-callerid` | 1.0.3 | `com.gogolook.trustall:trustall-callerid` |
+| `trustall-calllog` | 1.0.1 | `com.gogolook.trustall:trustall-calllog` |
+| `trustall-contact` | 1.0.1 | `com.gogolook.trustall:trustall-contact` |
+| `trustall-msgfilter` | 1.0.1 | `com.gogolook.trustall:trustall-msgfilter` |
+| `trustall-numberblock` | 1.0.1 | `com.gogolook.trustall:trustall-numberblock` |
+| `trustall-numbersearch` | 1.0.3 | `com.gogolook.trustall:trustall-numbersearch` |
+| `trustall-offlinedb` | 1.0.3 | `com.gogolook.trustall:trustall-offlinedb` |
+| `trustall-permission` | 1.0.1 | `com.gogolook.trustall:trustall-permission` |
+| `trustall-smslog` | 1.0.1 | `com.gogolook.trustall:trustall-smslog` |
+| `trustall-urlscan` | 1.0.1 | `com.gogolook.trustall:trustall-urlscan` |
+| `network:production` | 1.0.0 | `com.gogolook.trustall.network:production` |
+| `network:staging` | 1.0.0 | `com.gogolook.trustall.network:staging` |
+| `network:sandbox` | 1.0.0 | `com.gogolook.trustall.network:sandbox` |
+
+</details>
+
+All published AARs now ship with their internal implementation obfuscated. The public API surface (`Trustall` / `Trustall.*` entry points, model classes, and callback interfaces) is unchanged — no integration changes are required. When reporting a crash, please include the SDK module versions in use so the stack trace can be de-obfuscated.
+
+### trustall-auth `1.0.1`
+
+- `user_id` and `member_id` are now stored encrypted at rest
+
+### trustall-numbersearch `1.0.3`
+
+- Support the new quick-reply and survey fields in the number search response (Omnidroid 2026.07.01 schema)
+- `Trustall.numberSearch` initialization no longer performs blocking I/O; the search passphrase is now loaded lazily on first use
 
 ---
 
