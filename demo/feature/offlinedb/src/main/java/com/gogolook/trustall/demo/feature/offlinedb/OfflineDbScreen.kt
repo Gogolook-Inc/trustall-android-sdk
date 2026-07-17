@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -233,6 +235,8 @@ fun DownloadStatusDisplay(state: DownloadState) {
     }
 }
 
+private val sampleNumbers = listOf("+886975220325", "+886928840400")
+
 @Composable
 fun OfflineSearchSection(uiState: OfflineDbUiState, onSearch: (String) -> Unit) {
     var phoneNumber by remember { mutableStateOf("") }
@@ -246,6 +250,7 @@ fun OfflineSearchSection(uiState: OfflineDbUiState, onSearch: (String) -> Unit) 
                 onValueChange = { phoneNumber = it },
                 label = { Text("Phone Number") },
                 singleLine = true,
+                shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.weight(1f),
                 keyboardOptions =
                         KeyboardOptions(
@@ -262,6 +267,20 @@ fun OfflineSearchSection(uiState: OfflineDbUiState, onSearch: (String) -> Unit) 
         ) { Icon(Icons.Default.Search, contentDescription = "Search") }
     }
 
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        sampleNumbers.forEach { number ->
+            SampleNumberItem(number = number) {
+                phoneNumber = number
+                onSearch(number)
+            }
+        }
+    }
+
     Spacer(modifier = Modifier.height(16.dp))
 
     if (uiState.searchResult != null) {
@@ -270,6 +289,24 @@ fun OfflineSearchSection(uiState: OfflineDbUiState, onSearch: (String) -> Unit) 
 
     if (uiState.searchError != null) {
         Text(uiState.searchError!!, color = MaterialTheme.colorScheme.error)
+    }
+}
+
+@Composable
+fun SampleNumberItem(number: String, onClick: () -> Unit) {
+    Surface(
+            onClick = onClick,
+            shape = RoundedCornerShape(8.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.padding(2.dp)
+    ) {
+        Text(
+                text = number,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+        )
     }
 }
 
