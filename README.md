@@ -41,7 +41,7 @@ github_token=YOUR_GITHUB_TOKEN
 ```kotlin
 dependencies {
     // Import the BOM
-    implementation(platform("com.gogolook.trustall:trustall-bom:2026.04.01"))
+    implementation(platform("com.gogolook.trustall:trustall-bom:2026.07.01"))
 
     // Core (required)
     implementation("com.gogolook.trustall:trustall-core")
