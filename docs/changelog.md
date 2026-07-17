@@ -34,6 +34,10 @@
 
 All published AARs now ship with their internal implementation obfuscated. The public API surface (`Trustall` / `Trustall.*` entry points, model classes, and callback interfaces) is unchanged — no integration changes are required. When reporting a crash, please include the SDK module versions in use so the stack trace can be de-obfuscated.
 
+### trustall-auth `1.0.1`
+
+- `user_id` and `member_id` are now stored encrypted at rest
+
 ### trustall-numbersearch `1.0.3`
 
 - Support the new quick-reply and survey fields in the number search response (Omnidroid 2026.07.01 schema)
