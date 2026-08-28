@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gogolook.trustall.callerid.model.NumberInfo
 import com.gogolook.trustall.core.Trustall
+import com.gogolook.trustall.core.urlscan.model.Level
+import com.gogolook.trustall.core.urlscan.model.UrlScanResult
+import com.gogolook.trustall.demo.core.ui.UrlScanResultRow
 import com.gogolook.trustall.msgfilter.model.FilterType
 import com.gogolook.trustall.smslog.model.SmsLog
 import com.gogolook.trustall.smslog.smsLog
@@ -106,7 +109,10 @@ fun SmsLogItemCard(item: SmsLogUiModel) {
 
     val isSpamNumber = info?.spamLevel != NumberInfo.SpamLevel.UNLIKELY
     val isSpamMessage = filterType == FilterType.SPAM
-    val isSpam = isSpamNumber || isSpamMessage
+    val hasThreatUrl = item.urlResults.orEmpty().any {
+        it is UrlScanResult.Success && (it.level == Level.MALICIOUS || it.level == Level.SUSPICIOUS)
+    }
+    val isSpam = isSpamNumber || isSpamMessage || hasThreatUrl
     
     val cardColor = if (isSpam) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant
 
@@ -175,6 +181,13 @@ fun SmsLogItemCard(item: SmsLogUiModel) {
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
+
+            if (!item.urlResults.isNullOrEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    item.urlResults.forEach { result -> UrlScanResultRow(result) }
+                }
+            }
 
             if ((info != null && (info.isContact || info.bizCategory.isNotBlank() || info.spamCategory.isNotBlank())) ||
                 (filterType != null && filterType != FilterType.UNKNOWN) ||
