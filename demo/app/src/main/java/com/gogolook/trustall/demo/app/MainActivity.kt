@@ -28,6 +28,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.MarkEmailUnread
 import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Sms
 import androidx.compose.material.icons.rounded.Public
@@ -70,6 +71,7 @@ import com.gogolook.trustall.demo.feature.block.BlockScreen
 import com.gogolook.trustall.demo.feature.callerid.CallerIdScreen
 import com.gogolook.trustall.demo.feature.calllog.CallLogScreen
 import com.gogolook.trustall.demo.feature.msgfilter.MsgFilterScreen
+import com.gogolook.trustall.demo.feature.smsflow.SmsFlowScreen
 import com.gogolook.trustall.demo.feature.smslog.SmsLogScreen
 import com.gogolook.trustall.demo.feature.offlinedb.OfflineDbScreen
 import com.gogolook.trustall.demo.feature.search.SearchScreen
@@ -106,6 +108,7 @@ fun MainApp() {
                 "callerid" -> "Caller ID"
                 "calllog" -> "Call Log"
                 "smslog" -> "SMS Log"
+                "smsflow" -> "SMS Flow"
                 else -> "Trustall Demo"
             }
 
@@ -176,8 +179,9 @@ fun MainApp() {
                             Screen("msgfilter", "Msg Filter", Icons.Rounded.Email),
                             Screen("block", "Block", Icons.Rounded.Block),
                             Screen("callerid", "Caller ID", Icons.Rounded.Phone),
-                            Screen("calllog", "Call", Icons.Rounded.List),
-                            Screen("smslog", "SMS", Icons.Rounded.Sms)
+                            Screen("calllog", "Call Log", Icons.Rounded.List),
+                            Screen("smslog", "SMS Log", Icons.Rounded.Sms),
+                            Screen("smsflow", "SMS Flow", Icons.Rounded.MarkEmailUnread)
                         )
 
                         screens.forEach { screen ->
@@ -276,6 +280,7 @@ fun MainApp() {
             composable("callerid") { CallerIdScreen() }
             composable("calllog") { CallLogScreen() }
             composable("smslog") { SmsLogScreen() }
+            composable("smsflow") { SmsFlowScreen() }
         }
     }
 }
