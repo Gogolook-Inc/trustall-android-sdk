@@ -2,7 +2,50 @@
 
 ## Latest Version
 
-[trustall-bom `2026.07.01`](#trustall-bom-20260701)
+[trustall-bom `2026.08.01`](#trustall-bom-20260801)
+
+---
+
+## 2026.08.01 — August 28, 2026 {#trustall-bom-20260801}
+
+<details>
+<summary>Module versions in this BOM</summary>
+
+| Module | Version | Gradle Dependency |
+|--------|---------|-------------------|
+| `trustall-bom` | 2026.08.01 | `com.gogolook.trustall:trustall-bom` |
+| `trustall-core` | 2026.08.01 | `com.gogolook.trustall:trustall-core` |
+| `trustall-auth` | 1.0.1 | `com.gogolook.trustall:trustall-auth` |
+| `trustall-callerid` | 1.0.3 | `com.gogolook.trustall:trustall-callerid` |
+| `trustall-calllog` | 1.0.1 | `com.gogolook.trustall:trustall-calllog` |
+| `trustall-contact` | 1.0.1 | `com.gogolook.trustall:trustall-contact` |
+| `trustall-msgfilter` | 1.0.1 | `com.gogolook.trustall:trustall-msgfilter` |
+| `trustall-numberblock` | 1.0.1 | `com.gogolook.trustall:trustall-numberblock` |
+| `trustall-numbersearch` | 1.0.3 | `com.gogolook.trustall:trustall-numbersearch` |
+| `trustall-offlinedb` | 1.0.3 | `com.gogolook.trustall:trustall-offlinedb` |
+| `trustall-permission` | 1.0.1 | `com.gogolook.trustall:trustall-permission` |
+| `trustall-smsflow` | 1.0.0 | `com.gogolook.trustall:trustall-smsflow` |
+| `trustall-smslog` | 1.0.1 | `com.gogolook.trustall:trustall-smslog` |
+| `trustall-urlscan` | 1.0.2 | `com.gogolook.trustall:trustall-urlscan` |
+| `network:production` | 1.0.0 | `com.gogolook.trustall.network:production` |
+| `network:staging` | 1.0.0 | `com.gogolook.trustall.network:staging` |
+| `network:sandbox` | 1.0.0 | `com.gogolook.trustall.network:sandbox` |
+
+</details>
+
+### trustall-smsflow `1.0.0` — new module
+
+- Real-time incoming SMS events via `Trustall.smsFlow.incomingSms` (a hot `SharedFlow`)
+- The SMS receiver is declared in the module manifest: an incoming SMS wakes the host app process even after it has been killed, and the flow replays recent messages so a collector started from `Application.onCreate()` still observes the triggering message
+- Multipart segments are assembled before emission; the receiving SIM's subscription id is included
+- `hasSmsReceivePermission()` / `requestSmsReceivePermission()` manage the required `RECEIVE_SMS` permission (merged into the app manifest by this module)
+
+See [SMS Flow](sms-flow.md) for the full guide.
+
+### trustall-urlscan `1.0.2`
+
+- New `extractUrls(text)`: extracts web URLs from arbitrary text
+- New `scanText(text, cachePolicy)`: extracts URLs from a text (e.g. an SMS body) and scans them concurrently, returning one result per distinct URL; texts without URLs trigger no network call
 
 ---
 
