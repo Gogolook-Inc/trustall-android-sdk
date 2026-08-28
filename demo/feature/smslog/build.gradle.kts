@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.trustall.contact)
     implementation(libs.trustall.smslog)
     implementation(libs.trustall.msgfilter)
+    implementation(libs.trustall.urlscan)
     implementation(libs.trustall.permission)
     implementation(projects.core.ui)
     implementation(projects.core.util)

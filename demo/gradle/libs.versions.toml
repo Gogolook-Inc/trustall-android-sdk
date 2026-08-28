@@ -26,7 +26,7 @@ truth = "1.4.2"
 lifecycle = "2.8.7"
 room = "2.6.1"
 secrets = "2.0.1"
-trustallBom = "2026.07.01"
+trustallBom = "2026.08.01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -76,6 +76,7 @@ trustall-numberblock = { group = "com.gogolook.trustall", name = "trustall-numbe
 trustall-numbersearch = { group = "com.gogolook.trustall", name = "trustall-numbersearch" }
 trustall-offlinedb = { group = "com.gogolook.trustall", name = "trustall-offlinedb" }
 trustall-permission = { group = "com.gogolook.trustall", name = "trustall-permission" }
+trustall-smsflow = { group = "com.gogolook.trustall", name = "trustall-smsflow" }
 trustall-smslog = { group = "com.gogolook.trustall", name = "trustall-smslog" }
 trustall-urlscan = { group = "com.gogolook.trustall", name = "trustall-urlscan" }
 

@@ -8,6 +8,9 @@ import com.gogolook.trustall.callerid.model.NumberInfo
 import com.gogolook.trustall.callerid.model.NumberInfoState
 import com.gogolook.trustall.contact.contact
 import com.gogolook.trustall.core.Trustall
+import com.gogolook.trustall.core.urlscan.model.CachePolicy
+import com.gogolook.trustall.core.urlscan.model.UrlScanResult
+import com.gogolook.trustall.core.urlscan.urlScan
 import com.gogolook.trustall.permission.model.PermissionResult
 import com.gogolook.trustall.msgfilter.messageFilter
 import com.gogolook.trustall.msgfilter.model.FilterResult
@@ -19,12 +22,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class SmsLogUiModel(
     val smsLog: SmsLog,
     val numberInfo: NumberInfo? = null,
-    val filterType: FilterType? = null
+    val filterType: FilterType? = null,
+    val urlResults: List<UrlScanResult>? = null
 )
 
 sealed interface SmsLogUiState {
@@ -65,6 +70,7 @@ class SmsLogViewModel : ViewModel() {
                 _uiState.value = SmsLogUiState.Success(logs.map { SmsLogUiModel(it) })
                 fetchNumberInfoForDistinctNumbers(logs)
                 fetchFilterInfoForLogs(logs)
+                fetchUrlScanForLogs(logs)
             } catch (e: Exception) {
                 _uiState.value = SmsLogUiState.Error(e.message ?: "Failed to load SMS logs")
             }
@@ -84,15 +90,40 @@ class SmsLogViewModel : ViewModel() {
                                 is NumberInfoState.Loading -> null
                             }
                             if (info != null) {
-                                val currentState = _uiState.value
-                                if (currentState is SmsLogUiState.Success) {
-                                    _uiState.value = SmsLogUiState.Success(
-                                        currentState.logs.map {
+                                _uiState.update { state ->
+                                    if (state !is SmsLogUiState.Success) return@update state
+                                    SmsLogUiState.Success(
+                                        state.logs.map {
                                             if (it.smsLog.displayAddress == number) it.copy(numberInfo = info) else it
                                         }
                                     )
                                 }
                             }
+                        }
+                    } catch (_: Exception) {}
+                }
+            }
+        }
+    }
+
+    private fun fetchUrlScanForLogs(logs: List<SmsLog>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            logs.forEach { log ->
+                launch {
+                    try {
+                        // scanText extracts URLs locally first, so bodies without URLs
+                        // trigger no network call. Daily cache avoids rescanning the
+                        // same URLs on every reload.
+                        val results = Trustall.urlScan.scanText(log.displayBody, CachePolicy.day(1))
+                        // Atomic update: concurrent scans (and the other fetches) would
+                        // otherwise overwrite each other's read-modify-write.
+                        _uiState.update { state ->
+                            if (state !is SmsLogUiState.Success) return@update state
+                            SmsLogUiState.Success(
+                                state.logs.map {
+                                    if (it.smsLog.id == log.id) it.copy(urlResults = results) else it
+                                }
+                            )
                         }
                     } catch (_: Exception) {}
                 }
@@ -111,10 +142,10 @@ class SmsLogViewModel : ViewModel() {
 
                 when (val result = Trustall.messageFilter.filter(messages)) {
                     is FilterResult.Success -> {
-                        val currentState = _uiState.value
-                        if (currentState is SmsLogUiState.Success) {
-                            _uiState.value = SmsLogUiState.Success(
-                                currentState.logs.map { uiModel ->
+                        _uiState.update { state ->
+                            if (state !is SmsLogUiState.Success) return@update state
+                            SmsLogUiState.Success(
+                                state.logs.map { uiModel ->
                                     val type = result.results[uiModel.smsLog.id]
                                     if (type != null) uiModel.copy(filterType = type) else uiModel
                                 }

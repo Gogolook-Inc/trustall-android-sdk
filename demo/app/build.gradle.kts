@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.feature.block)
     implementation(projects.feature.callerid)
     implementation(projects.feature.calllog)
+    implementation(projects.feature.smsflow)
     implementation(projects.feature.smslog)
     implementation(projects.core.designsystem)
     implementation(projects.core.ui)
@@ -66,6 +67,8 @@ dependencies {
     implementation(libs.trustall.network.staging)
     implementation(libs.trustall.auth)
     implementation(libs.trustall.callerid)
+    implementation(libs.trustall.smsflow)
+    implementation(libs.trustall.urlscan)
     implementation(libs.trustall.numberblock)
     implementation(libs.trustall.numbersearch)
 

@@ -1,6 +1,7 @@
 package com.gogolook.trustall.demo.app
 
 import android.app.Application
+import android.provider.Settings
 import android.util.Log
 import com.gogolook.trustall.callerid.callerId
 import com.gogolook.trustall.callerid.callflow.CallsCallback
@@ -13,11 +14,15 @@ import com.gogolook.trustall.core.Trustall
 import com.gogolook.trustall.core.auth.auth
 import com.gogolook.trustall.core.model.SdkConfig
 import com.gogolook.trustall.demo.core.ui.CallerIdOverlay
+import com.gogolook.trustall.demo.core.ui.SmsAlertOverlay
+import com.gogolook.trustall.demo.feature.smsflow.SmsFlowManager
 import com.gogolook.trustall.core.auth.model.AuthResult
 import com.gogolook.trustall.numberblock.numberBlock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -28,6 +33,8 @@ class DemoApplication : Application() {
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var overlay: CallerIdOverlay? = null
+    private var smsAlertOverlay: SmsAlertOverlay? = null
+    private var smsAlertDismissJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -48,6 +55,34 @@ class DemoApplication : Application() {
             
             overlay = CallerIdOverlay(this@DemoApplication)
             setupCallerIdCallback()
+
+            smsAlertOverlay = SmsAlertOverlay(this@DemoApplication)
+            setupSmsFlowAlert()
+        }
+    }
+
+    private fun setupSmsFlowAlert() {
+        SmsFlowManager.start(applicationScope)
+        applicationScope.launch {
+            var lastShownId: String? = null
+            SmsFlowManager.latest.collect { latest ->
+                // Scan-result updates of the message already on screen reach the overlay
+                // through the flow it collects; only a new message (re)opens the popup.
+                if (latest == null || latest.id == lastShownId) return@collect
+                lastShownId = latest.id
+
+                if (!Settings.canDrawOverlays(this@DemoApplication)) {
+                    Log.d("DemoApplication", "Overlay permission missing, skip SMS alert.")
+                    return@collect
+                }
+
+                smsAlertOverlay?.show(SmsFlowManager.latest)
+                smsAlertDismissJob?.cancel()
+                smsAlertDismissJob = applicationScope.launch {
+                    delay(10_000)
+                    smsAlertOverlay?.dismiss()
+                }
+            }
         }
     }
 
