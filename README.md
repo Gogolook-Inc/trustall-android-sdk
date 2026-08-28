@@ -99,6 +99,7 @@ class MyApp : Application() {
 | `Trustall.numberBlock` | `trustall-numberblock` | [Number Block](docs/number-block.md) |
 | `Trustall.numberSearch` | `trustall-numbersearch` | [Number Search](docs/number-search.md) |
 | `Trustall.offlineDb` | `trustall-offlinedb` | [Offline DB](docs/offline-db.md) |
+| `Trustall.smsFlow` | `trustall-smsflow` | [SMS Flow](docs/sms-flow.md) |
 | `Trustall.smsLog` | `trustall-smslog` | [SMS Log](docs/sms-log.md) |
 | `Trustall.urlScan` | `trustall-urlscan` | [URL Scan](docs/url-scan.md) |
 
@@ -113,6 +114,7 @@ class MyApp : Application() {
 - [Number Block](docs/number-block.md) — Local block list management
 - [Number Search](docs/number-search.md) — Online number lookup with cache
 - [Offline DB](docs/offline-db.md) — On-device number database
+- [SMS Flow](docs/sms-flow.md) — Real-time incoming SMS events with background delivery
 - [SMS Log](docs/sms-log.md) — SMS and MMS log retrieval
 - [URL Scan](docs/url-scan.md) — URL threat scanning
 - [Number Categories](docs/number-categories.md) — `bizCategory` and `spamCategory` reference
