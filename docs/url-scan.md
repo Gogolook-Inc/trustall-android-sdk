@@ -55,6 +55,32 @@ val policy = CachePolicy(
 )
 ```
 
+## Scan URLs in Text
+
+[`scanText()`](#scantext) extracts every URL from a piece of text — an SMS body, a chat message — and scans them concurrently, returning one result per distinct URL. Texts without URLs trigger no network call.
+
+```kotlin
+val results = Trustall.urlScan.scanText(
+    text = "Claim your prize at http://example.com/win",
+    cachePolicy = CachePolicy.day(1),
+)
+results.forEach { result ->
+    when (result) {
+        is UrlScanResult.Success -> Log.d("UrlScan", "${result.url}: ${result.level}")
+        is UrlScanResult.Error   -> Log.e("UrlScan", "Scan error for ${result.url}", result.error)
+    }
+}
+```
+
+To extract without scanning, use [`extractUrls()`](#extracturls):
+
+```kotlin
+val urls = Trustall.urlScan.extractUrls("check http://a.com and b.com/path")
+// ["http://a.com", "b.com/path"]
+```
+
+Pairs naturally with [SMS Flow](sms-flow.md) to scan every incoming SMS for malicious links.
+
 ---
 
 ## API Reference
@@ -79,6 +105,39 @@ Scans the given URL for threats.
 | `cachePolicy` | [`CachePolicy`](#cachepolicy) | Cache behaviour; defaults to `CachePolicy.NO_CACHE` |
 
 **Returns:** [`UrlScanResult`](#urlscanresult)
+
+---
+
+#### `extractUrls`
+
+```kotlin
+fun extractUrls(text: String): List<String>
+```
+
+Extracts web URLs from arbitrary text. Matches are returned verbatim (scheme-less matches such as `example.com/path` are not rewritten), deduplicated, in order of first appearance. The domain part of email addresses is skipped.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `text` | `String` | The text to search for URLs |
+
+**Returns:** `List<String>`
+
+---
+
+#### `scanText`
+
+```kotlin
+suspend fun scanText(text: String, cachePolicy: CachePolicy = CachePolicy.NO_CACHE): List<UrlScanResult>
+```
+
+Extracts URLs from the text via [`extractUrls()`](#extracturls) and scans them concurrently.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `text` | `String` | The text (e.g. an SMS body) to extract URLs from |
+| `cachePolicy` | [`CachePolicy`](#cachepolicy) | Cache behaviour applied to each scan; defaults to `CachePolicy.NO_CACHE` |
+
+**Returns:** `List<`[`UrlScanResult`](#urlscanresult)`>` — one result per distinct URL found; empty when the text contains no URL
 
 ---
 
