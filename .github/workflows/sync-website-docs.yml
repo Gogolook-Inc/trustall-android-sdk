@@ -3,8 +3,9 @@ name: Sync website docs
 # Regenerates the Android pages of the developer website from docs/ and opens a pull request
 # there. The site is built first, so a page that does not compile never reaches the website repo.
 #
-# WEBSITE_SYNC_TOKEN must be able to read and write contents and pull requests on
-# Gogolook-Inc/trustall-website (a fine-grained PAT or a GitHub App installation token).
+# The website repo is private, so the token comes from a GitHub App installed on
+# Gogolook-Inc/trustall-website with Contents and Pull requests read/write. Its App ID and private
+# key are the WEBSITE_SYNC_APP_ID and WEBSITE_SYNC_APP_PRIVATE_KEY repository secrets.
 
 on:
   push:
@@ -28,10 +29,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Mint a token for the website repo
+        id: website-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.WEBSITE_SYNC_APP_ID }}
+          private-key: ${{ secrets.WEBSITE_SYNC_APP_PRIVATE_KEY }}
+          owner: Gogolook-Inc
+          repositories: trustall-website
+
       - uses: actions/checkout@v4
         with:
           repository: Gogolook-Inc/trustall-website
-          token: ${{ secrets.WEBSITE_SYNC_TOKEN }}
+          token: ${{ steps.website-token.outputs.token }}
           path: website
 
       - uses: actions/setup-node@v4
@@ -53,7 +63,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           path: website
-          token: ${{ secrets.WEBSITE_SYNC_TOKEN }}
+          token: ${{ steps.website-token.outputs.token }}
           base: main
           branch: sync/android-docs
           delete-branch: true
