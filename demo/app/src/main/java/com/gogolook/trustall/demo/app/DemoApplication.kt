@@ -12,8 +12,12 @@ import com.gogolook.trustall.callerid.model.NumberInfo
 import com.gogolook.trustall.callerid.model.NumberInfoState
 import com.gogolook.trustall.core.Trustall
 import com.gogolook.trustall.core.auth.auth
-import com.gogolook.trustall.core.model.SdkConfig
 import com.gogolook.trustall.demo.core.ui.CallerIdOverlay
+import com.gogolook.trustall.demo.core.util.SdkBootstrap
+import com.gogolook.trustall.demo.feature.calllog.CallLogUploadProviders
+import com.gogolook.trustall.demo.feature.offlinedb.OfflineDbProviders
+import com.gogolook.trustall.demo.feature.search.NumberSearchProviders
+import com.gogolook.trustall.demo.feature.urlscan.UrlScanProviders
 import com.gogolook.trustall.demo.core.ui.SmsAlertOverlay
 import com.gogolook.trustall.demo.feature.smsflow.SmsFlowManager
 import com.gogolook.trustall.core.auth.model.AuthResult
@@ -40,8 +44,20 @@ class DemoApplication : Application() {
         super.onCreate()
 
         applicationScope.launch {
-            val config = SdkConfig(licenseId = BuildConfig.LICENSE_ID, isDebug = true)
-            Trustall.initialize(this@DemoApplication, config)
+            // Restoring each seam's stored choice. The screens re-register on every toggle, so
+            // this is not the only registration point — it is the one that gets a custom provider
+            // in place before the built-in one has run, which is the whole point of the seam.
+            // Each feature owns its own, and its screen is where the choice is made.
+            NumberSearchProviders.apply(this@DemoApplication)
+            UrlScanProviders.apply(this@DemoApplication)
+            OfflineDbProviders.apply(this@DemoApplication)
+            CallLogUploadProviders.apply(this@DemoApplication)
+
+            // No device identifier passed: the SDK reads back the one it stored, whether that
+            // is the one it generated on first run or one the Auth screen handed it later.
+            SdkBootstrap.remember(licenseId = BuildConfig.LICENSE_ID, isDebug = true)
+            SdkBootstrap.initialize(this@DemoApplication)
+            Log.d("DemoApplication", "deviceId in use: ${Trustall.deviceId}")
             if (Trustall.auth.getUserId().isEmpty()) {
                 when (val result = Trustall.auth.register(memberId = UUID.randomUUID().toString())) {
                     is AuthResult.Success -> {

@@ -51,10 +51,12 @@ class OfflineDbViewModel : ViewModel() {
         viewModelScope.launch {
             Trustall.offlineDb.clear()
             _uiState.value = _uiState.value.copy(
-                dbProfile = null,
                 searchResult = null,
                 downloadState = null // Reset download state on clear
             )
+            // Re-read rather than assume null: clear() is a default no-op on providers that ship
+            // their database inside the app, so the profile may legitimately survive it.
+            refreshProfile()
         }
     }
 

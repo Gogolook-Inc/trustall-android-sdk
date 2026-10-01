@@ -26,7 +26,7 @@ truth = "1.4.2"
 lifecycle = "2.8.7"
 room = "2.6.1"
 secrets = "2.0.1"
-trustallBom = "2026.08.01"
+trustallBom = "2026.09.01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,7 +63,6 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 # trustall SDK
 trustall-bom = { group = "com.gogolook.trustall", name = "trustall-bom", version.ref = "trustallBom" }
 trustall-core = { group = "com.gogolook.trustall", name = "trustall-core" }
-trustall-auth = { group = "com.gogolook.trustall", name = "trustall-auth" }
 trustall-callerid = { group = "com.gogolook.trustall", name = "trustall-callerid" }
 trustall-calllog = { group = "com.gogolook.trustall", name = "trustall-calllog" }
 trustall-contact = { group = "com.gogolook.trustall", name = "trustall-contact" }

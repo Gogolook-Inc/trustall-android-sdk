@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.util)
     implementation(projects.feature.auth)
     implementation(projects.feature.search)
     implementation(projects.feature.offlinedb)
@@ -65,7 +66,6 @@ dependencies {
 //    implementation(libs.trustall.network.production)
 //    implementation(libs.trustall.network.sandbox)
     implementation(libs.trustall.network.staging)
-    implementation(libs.trustall.auth)
     implementation(libs.trustall.callerid)
     implementation(libs.trustall.smsflow)
     implementation(libs.trustall.urlscan)

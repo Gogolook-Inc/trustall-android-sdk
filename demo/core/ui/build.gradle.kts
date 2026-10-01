@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.trustall.urlscan)
     implementation(libs.trustall.msgfilter)
     implementation(projects.core.designsystem)
+    implementation(projects.core.util)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)
