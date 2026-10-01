@@ -33,6 +33,7 @@ import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.Sms
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -155,6 +156,14 @@ fun MainApp() {
                                 Icon(
                                         imageVector = Icons.Rounded.Delete,
                                         contentDescription = "Clear Data"
+                                )
+                            }
+                            // A second initialize() rebuilds nothing already built, so a
+                            // restart is the only clean start to compare against.
+                            IconButton(onClick = { RestartActivity.restart(context) }) {
+                                Icon(
+                                        imageVector = Icons.Rounded.Refresh,
+                                        contentDescription = "Restart app"
                                 )
                             }
                         }

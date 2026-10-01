@@ -11,6 +11,7 @@ dependencies {
     implementation(platform(libs.trustall.bom))
     implementation(libs.trustall.core)
     implementation(libs.trustall.urlscan)
+    implementation(projects.core.ui)
     implementation(projects.core.util)
     
     implementation(libs.androidx.material3)

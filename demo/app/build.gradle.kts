@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.util)
     implementation(projects.feature.auth)
     implementation(projects.feature.search)
     implementation(projects.feature.offlinedb)

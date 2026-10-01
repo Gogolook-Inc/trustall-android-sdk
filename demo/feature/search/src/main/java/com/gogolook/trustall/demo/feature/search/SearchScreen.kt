@@ -102,6 +102,8 @@ fun SearchScreen(viewModel: SearchViewModel = viewModel(), onNavigateToCallerId:
             modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        NumberSearchProviderCard()
+        Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it },

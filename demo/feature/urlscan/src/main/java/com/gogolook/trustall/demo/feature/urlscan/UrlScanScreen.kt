@@ -79,6 +79,8 @@ fun UrlScanScreen(viewModel: UrlScanViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        UrlScanProviderCard()
+        Spacer(modifier = Modifier.height(16.dp))
         ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = {}) {
             OutlinedTextField(
                     value = url,

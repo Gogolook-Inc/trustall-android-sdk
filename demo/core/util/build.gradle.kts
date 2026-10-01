@@ -8,4 +8,6 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.trustall.bom))
+    implementation(libs.trustall.core)
 }

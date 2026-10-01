@@ -63,6 +63,8 @@ fun OfflineDbScreen(viewModel: OfflineDbViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        OfflineDbProviderCard()
+        Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.height(16.dp))
 
         // --- Database Status Section ---

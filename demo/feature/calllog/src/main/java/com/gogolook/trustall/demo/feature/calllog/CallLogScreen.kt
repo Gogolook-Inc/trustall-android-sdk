@@ -75,17 +75,15 @@ fun CallLogScreen(
                 }
             }
             is CallLogUiState.Success -> {
-                if (state.logs.isEmpty()) {
-                    Text(
-                        text = "No call logs found.",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 88.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 88.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item { CallLogUploadProviderCard() }
+                    if (state.logs.isEmpty()) {
+                        item { Text(text = "No call logs found.") }
+                    } else {
                         items(state.logs, key = { it.callLog.id }) { item ->
                             CallLogItemCard(
                                 item = item,
