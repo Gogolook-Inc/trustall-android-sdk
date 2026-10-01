@@ -60,6 +60,27 @@ when (result) {
 val hasPermission = Trustall.callLog.hasCallLogPermission()
 ```
 
+## Custom Upload Destination
+
+Implement [`CallLogUploadProvider`](#callloguploadprovider) to send uploaded call logs to your own backend, and register it with [`setProvider()`](#setprovider) before `Trustall.initialize()`:
+
+```kotlin
+class MyUploader : CallLogUploadProvider {
+    override suspend fun uploadCallLogs(callLogs: List<CallLog>): UploadResult =
+        if (myBackend.send(callLogs)) UploadResult.Success
+        else UploadResult.Error(500, "upload rejected")
+}
+
+TrustallCallLog.setProvider(MyUploader())
+```
+
+- A single destination replaces Gogolook's. `setProvider(null)` restores it.
+- `uploadCallLogs()` passes its list straight through. `autoUploadCallLogs()` sends batches of 20, oldest first, and advances its watermark after each batch that returns `Success`; any other result stops the run there, and those logs are retried next time. The watermark is kept when the provider changes, so a provider registered later receives only calls since the last successful upload.
+- Report failures as `UploadResult.Error` or `UploadResult.NetworkError`. A throw is reported as `NetworkError`.
+- `getCallLogs()` and the permission helpers read the device only and are unaffected.
+
+See [Custom Providers](getting-started.md#custom-providers) for the rules common to every provider.
+
 ---
 
 ## API Reference
@@ -140,6 +161,46 @@ Requests `READ_CALL_LOG` permission.
 **Returns:** [`PermissionResult`](#permissionresult)
 
 ---
+
+### Provider Configuration
+
+Companion members of `TrustallCallLog`, called on the class rather than on `Trustall.callLog`.
+
+#### `setProvider`
+
+```kotlin
+fun setProvider(provider: CallLogUploadProvider?)
+```
+
+Sends uploaded call logs to the given provider. Takes effect from the next upload.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `provider` | `CallLogUploadProvider?` | Where to send call logs. `null` restores the built-in destination. |
+
+---
+
+#### `defaultProvider`
+
+```kotlin
+val defaultProvider: CallLogUploadProvider
+```
+
+The built-in Gogolook destination.
+
+---
+
+### CallLogUploadProvider
+
+```kotlin
+interface CallLogUploadProvider {
+    suspend fun uploadCallLogs(callLogs: List<CallLog>): UploadResult
+}
+```
+
+| Function | Description |
+|----------|-------------|
+| `uploadCallLogs(callLogs)` | Uploads the logs and reports the outcome. At most 20 per call when driven by `autoUploadCallLogs()`. |
 
 ### CallLog
 

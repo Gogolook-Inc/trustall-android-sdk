@@ -52,6 +52,28 @@ if (profile != null) {
 Trustall.offlineDb.clear()
 ```
 
+## Custom Provider
+
+Implement [`OfflineDbProvider`](#offlinedbprovider) to back offline lookups with your own database — one shipped inside the app or downloaded from your own servers — and register it with [`setProvider()`](#setprovider) before `Trustall.initialize()`:
+
+```kotlin
+class MyOfflineDb : OfflineDbProvider {
+    override suspend fun getNumberInfo(number: String): OfflineNumberInfo? =
+        myBundledDb.lookup(number)
+}
+
+TrustallOfflineDb.setProvider(MyOfflineDb())
+```
+
+Only `getNumberInfo()` is required. The other functions default to what suits a database shipped inside the app: `downloadIfNeeded()` emits `Finished` at once, `clear()` does nothing and `getDbProfile()` returns `null`. Override them if your database is downloaded.
+
+- A single provider replaces the whole database: `downloadIfNeeded()`, `getNumberInfo()`, `getDbProfile()` and `clear()` on `Trustall.offlineDb` all go to it. There is no chain; merge several sources inside one implementation if needed.
+- `setProvider(null)` restores Gogolook's database.
+- Registering before `initialize()` means Gogolook's database is never downloaded. Switching later leaves any file already downloaded in place; call `TrustallOfflineDb.defaultProvider.clear()` to delete it.
+- A throw inside `getNumberInfo()` is logged and yields `null`. A throw inside `downloadIfNeeded()` is reported as `DownloadState.Failed(Reason.UNKNOWN)`; emit `Failed` yourself to keep the specific `Reason`.
+
+The provider also backs the offline source of [`Trustall.callerId.getNumberInfo()`](caller-id.md#number-info-lookup) and the offline spam-level check suggested for [call screening](caller-id.md#call-event-callbacks). `getNumberInfo()` must not block the caller — Caller ID queries it while the phone is ringing — so move file and database I/O to your own dispatcher. See [Custom Providers](getting-started.md#custom-providers) for the rules common to every provider.
+
 ---
 
 ## API Reference
@@ -111,6 +133,52 @@ suspend fun clear()
 Clears the local offline database.
 
 ---
+
+### Provider Configuration
+
+Companion members of `TrustallOfflineDb`, called on the class rather than on `Trustall.offlineDb`.
+
+#### `setProvider`
+
+```kotlin
+fun setProvider(provider: OfflineDbProvider?)
+```
+
+Replaces the offline database with the given provider. Takes effect from the next call.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `provider` | `OfflineDbProvider?` | The database to use. `null` restores the built-in database. |
+
+---
+
+#### `defaultProvider`
+
+```kotlin
+val defaultProvider: OfflineDbProvider
+```
+
+The built-in Gogolook database.
+
+---
+
+### OfflineDbProvider
+
+```kotlin
+interface OfflineDbProvider {
+    suspend fun getNumberInfo(number: String): OfflineNumberInfo?
+    fun downloadIfNeeded(): Flow<DownloadState> = flowOf(DownloadState.Finished)
+    suspend fun clear() {}
+    suspend fun getDbProfile(): OfflineDbProfile? = null
+}
+```
+
+| Function | Description |
+|----------|-------------|
+| `getNumberInfo(number)` | Returns what the database knows about the number, or `null`. |
+| `downloadIfNeeded()` | Optional. Emits progress until the download finishes or fails. |
+| `clear()` | Optional. Deletes the local database. |
+| `getDbProfile()` | Optional. Returns the profile of the database in place, or `null`. |
 
 ### OfflineNumberInfo
 

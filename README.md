@@ -41,13 +41,12 @@ github_token=YOUR_GITHUB_TOKEN
 ```kotlin
 dependencies {
     // Import the BOM
-    implementation(platform("com.gogolook.trustall:trustall-bom:2026.08.01"))
+    implementation(platform("com.gogolook.trustall:trustall-bom:2026.09.01"))
 
     // Core (required)
     implementation("com.gogolook.trustall:trustall-core")
 
     // Add feature modules as needed — no version required
-    implementation("com.gogolook.trustall:trustall-auth")
     implementation("com.gogolook.trustall:trustall-callerid")
     implementation("com.gogolook.trustall:trustall-calllog")
     implementation("com.gogolook.trustall:trustall-contact")
@@ -91,7 +90,7 @@ class MyApp : Application() {
 
 | Property | Module | Docs |
 |----------|--------|------|
-| `Trustall.auth` | `trustall-auth` | [Auth](docs/auth.md) |
+| `Trustall.auth` | `trustall-core` | [Auth](docs/auth.md) |
 | `Trustall.callerId` | `trustall-callerid` | [Caller ID](docs/caller-id.md) |
 | `Trustall.callLog` | `trustall-calllog` | [Call Log](docs/call-log.md) |
 | `Trustall.contact` | `trustall-contact` | [Contact](docs/contact.md) |

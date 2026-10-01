@@ -2,7 +2,71 @@
 
 ## Latest Version
 
-[trustall-bom `2026.08.01`](#trustall-bom-20260801)
+[trustall-bom `2026.09.01`](#trustall-bom-20260901)
+
+---
+
+## 2026.09.01 — September 23, 2026 {#trustall-bom-20260901}
+
+<details>
+<summary>Module versions in this BOM</summary>
+
+| Module | Version | Gradle Dependency |
+|--------|---------|-------------------|
+| `trustall-bom` | 2026.09.01 | `com.gogolook.trustall:trustall-bom` |
+| `trustall-core` | 2026.09.01 | `com.gogolook.trustall:trustall-core` |
+| `trustall-callerid` | 1.0.3 | `com.gogolook.trustall:trustall-callerid` |
+| `trustall-calllog` | 1.1.0 | `com.gogolook.trustall:trustall-calllog` |
+| `trustall-contact` | 1.0.1 | `com.gogolook.trustall:trustall-contact` |
+| `trustall-msgfilter` | 1.0.2 | `com.gogolook.trustall:trustall-msgfilter` |
+| `trustall-numberblock` | 1.0.2 | `com.gogolook.trustall:trustall-numberblock` |
+| `trustall-numbersearch` | 1.1.0 | `com.gogolook.trustall:trustall-numbersearch` |
+| `trustall-offlinedb` | 1.1.0 | `com.gogolook.trustall:trustall-offlinedb` |
+| `trustall-permission` | 1.0.1 | `com.gogolook.trustall:trustall-permission` |
+| `trustall-smsflow` | 1.0.0 | `com.gogolook.trustall:trustall-smsflow` |
+| `trustall-smslog` | 1.0.1 | `com.gogolook.trustall:trustall-smslog` |
+| `trustall-urlscan` | 1.1.0 | `com.gogolook.trustall:trustall-urlscan` |
+| `network:production` | 1.0.0 | `com.gogolook.trustall.network:production` |
+| `network:staging` | 1.0.0 | `com.gogolook.trustall.network:staging` |
+| `network:sandbox` | 1.0.0 | `com.gogolook.trustall.network:sandbox` |
+
+</details>
+
+Number search, URL scan, the offline database and call log upload can now be backed by your own implementation, and the device ID can be supplied at initialization. See [Custom Providers](getting-started.md#custom-providers) and [Device ID](getting-started.md#device-id).
+
+### trustall-core `2026.09.01`
+
+- **Breaking:** `trustall-auth` is merged into `trustall-core` and is no longer published. Remove `com.gogolook.trustall:trustall-auth` from your dependencies; `Trustall.auth` and the `com.gogolook.trustall.core.auth` package are unchanged.
+- **Breaking:** `Trustall.deviceId` is read-only.
+- New `SdkConfig.deviceId`: supply your own device ID (32 lowercase hex characters) instead of the SDK-generated one. It is stored and reused on later launches. A different value discards the current registration and member ID, and the device registers again.
+- `Trustall.initialize()` can be called again on a running SDK to adopt a new device ID without a relaunch.
+
+### trustall-numbersearch `1.1.0`
+
+- New `NumberSearchProvider` and `TrustallNumberSearch.setProviders()`: serve lookups from your own backend. Providers are consulted in order and the first non-`null` result wins; cache operations reach every provider. `TrustallNumberSearch.defaultProvider` exposes the built-in provider for use as a fallback. See [Custom Providers](number-search.md#custom-providers).
+- `OnlineNumberInfo` now defaults every field except `number`.
+- Changed: cancelling the calling coroutine propagates out of `getNumberInfo()` instead of returning `null`. `clearCache()` and `removeExpiredCache()` log and skip a failing provider instead of throwing.
+
+### trustall-urlscan `1.1.0`
+
+- New `UrlScanProvider` and `TrustallUrlScan.setProviders()`: scan against your own backend. The first `Success` wins; `Error` or a throw moves to the next provider, and `null` means the provider does not cover the URL. `scanText()` uses the same providers. `TrustallUrlScan.defaultProvider` exposes the built-in provider. See [Custom Providers](url-scan.md#custom-providers).
+- Changed: cancelling the calling coroutine propagates out of `scan()` instead of returning `UrlScanResult.Error`.
+
+### trustall-offlinedb `1.1.0`
+
+- New `OfflineDbProvider` and `TrustallOfflineDb.setProvider()`: back offline lookups with your own database. Only `getNumberInfo()` is required. `TrustallOfflineDb.defaultProvider` exposes the built-in database. See [Custom Provider](offline-db.md#custom-provider).
+- `getNumberInfo()` returns `null` instead of throwing when the lookup fails. `downloadIfNeeded()` reports a throw as `DownloadState.Failed(Reason.UNKNOWN)`.
+- Fixed: a cancelled download is no longer reported as `Failed`.
+
+### trustall-calllog `1.1.0`
+
+- New `CallLogUploadProvider` and `TrustallCallLog.setProvider()`: send uploads to your own backend. `TrustallCallLog.defaultProvider` exposes the built-in destination. See [Custom Upload Destination](call-log.md#custom-upload-destination).
+- Fixed: `autoUploadCallLogs()` re-uploaded the newest already-uploaded record on every run.
+- Fixed: a cancelled upload is no longer reported as `NetworkError`.
+
+### trustall-msgfilter `1.0.2`, trustall-numberblock `1.0.2`
+
+- No functional change. Republished without the `trustall-auth` dependency.
 
 ---
 

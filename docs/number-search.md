@@ -38,6 +38,32 @@ Trustall.numberSearch.clearCache()
 Trustall.numberSearch.removeExpiredCache()
 ```
 
+## Custom Providers
+
+Implement [`NumberSearchProvider`](#numbersearchprovider) to serve lookups from your own backend, and register it with [`setProviders()`](#setproviders) before `Trustall.initialize()`:
+
+```kotlin
+class MyProvider : NumberSearchProvider {
+    override suspend fun getNumberInfo(e164: String, isForceUpdate: Boolean): OnlineNumberInfo? =
+        myBackend.lookup(e164)?.let { OnlineNumberInfo(number = e164, name = it.name) }
+}
+
+TrustallNumberSearch.setProviders(listOf(MyProvider()))
+```
+
+Only `getNumberInfo()` is required. `OnlineNumberInfo` needs just `number`; every other field defaults to "no data".
+
+How the list is consulted:
+
+- `getNumberInfo()` asks each provider in order and returns the first non-`null` result. A provider that returns `null` or throws is skipped (throws are logged). If every provider is skipped, the result is `null`.
+- `clearCache()` and `removeExpiredCache()` are forwarded to every provider in the list.
+- To keep Gogolook's search as a fallback, put `TrustallNumberSearch.defaultProvider` last.
+- `setProviders(null)` restores Gogolook's search as the only source. `setProviders(emptyList())` leaves no source, so every lookup returns `null`.
+
+The same list backs the online source of [`Trustall.callerId.getNumberInfo()`](caller-id.md#number-info-lookup), so the name, categories and spam level it reports come from your providers.
+
+`getNumberInfo()` must not block the caller — Caller ID looks numbers up while the phone is ringing. See [Custom Providers](getting-started.md#custom-providers) for the rules common to every provider.
+
 ---
 
 ## API Reference
@@ -99,6 +125,52 @@ Removes expired cache entries from the database.
 
 ---
 
+### Provider Configuration
+
+Companion members of `TrustallNumberSearch`, called on the class rather than on `Trustall.numberSearch`.
+
+#### `setProviders`
+
+```kotlin
+fun setProviders(providers: List<NumberSearchProvider>?)
+```
+
+Sets the ordered list of providers used for lookups, replacing any previous one. Takes effect from the next call.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `providers` | `List<NumberSearchProvider>?` | Providers in priority order. `null` restores the built-in provider; an empty list leaves no source. |
+
+---
+
+#### `defaultProvider`
+
+```kotlin
+val defaultProvider: NumberSearchProvider
+```
+
+The built-in Gogolook provider. Put it last in the list to keep it as a fallback.
+
+---
+
+### NumberSearchProvider
+
+```kotlin
+interface NumberSearchProvider {
+    suspend fun getNumberInfo(e164: String, isForceUpdate: Boolean): OnlineNumberInfo?
+    suspend fun clearCache(vararg e164s: String): Int = 0
+    suspend fun clearCache() {}
+    suspend fun removeExpiredCache() {}
+}
+```
+
+| Function | Description |
+|----------|-------------|
+| `getNumberInfo(e164, isForceUpdate)` | Returns info for the number, or `null` to pass to the next provider. `isForceUpdate` asks to bypass any cache you keep. |
+| `clearCache(vararg e164s)` | Optional. Returns how many entries were removed. |
+| `clearCache()` | Optional. |
+| `removeExpiredCache()` | Optional. |
+
 ### OnlineNumberInfo
 
 | Field | Type | Description |
@@ -108,6 +180,8 @@ Removes expired cache entries from the database.
 | `bizCategory` | `String` | Business category tag — see [Number Categories](./number-categories.md#business-categories) |
 | `spamCategory` | `String` | Spam category tag — see [Number Categories](./number-categories.md#spam-categories) |
 | `spamLevel` | [`SpamLevel`](#onlinenumberinfospamlevel) | Spam level |
+
+Only `number` is required when constructing one; the other fields default to `""` and `UNLIKELY`.
 
 ### OnlineNumberInfo.SpamLevel
 
