@@ -11,7 +11,7 @@
 
 The SDK is hosted on GitHub Packages. Add the repository to your `settings.gradle` (or project-level `build.gradle`):
 
-> **Note:** The package is public. Any GitHub personal access token (classic or fine-grained) with the **read:packages** scope will work — it does not need to belong to a specific organization.
+> **Note — GitHub Token:** The package is public. Any GitHub personal access token (classic or fine-grained) with the **read:packages** scope will work — it does not need to belong to a specific organization.
 
 #### Kotlin DSL
 
@@ -165,7 +165,7 @@ lifecycleScope.launch {
 }
 ```
 
-> **Tip:** We recommend holding the splash screen until `isInitialized` emits `true`. This ensures the SDK is fully ready before the user reaches your main UI.
+> **Tip — Use with SplashScreen:** We recommend holding the splash screen until `isInitialized` emits `true`. This ensures the SDK is fully ready before the user reaches your main UI.
 >
 > ```kotlin
 > class MainActivity : AppCompatActivity() {
@@ -246,3 +246,7 @@ Rules common to every provider:
 | `Trustall.smsFlow` | trustall-smsflow | Real-time incoming SMS events |
 | `Trustall.smsLog` | trustall-smslog | SMS / MMS log retrieval |
 | `Trustall.urlScan` | trustall-urlscan | URL threat scanning |
+
+## Sample App
+
+A fully working demo app is available in the [`demo/`](https://github.com/Gogolook-Inc/trustall-android-sdk/tree/master/demo) directory of the SDK repository.
