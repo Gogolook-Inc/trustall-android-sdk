@@ -11,7 +11,6 @@ android {
 dependencies {
     implementation(platform(libs.trustall.bom))
     implementation(libs.trustall.core)
-    implementation(libs.trustall.auth)
     
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
