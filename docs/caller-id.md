@@ -85,6 +85,8 @@ Trustall.callerId.setCallsCallback(object : CallsCallback {
 
 If you only need data from a single source, use the corresponding module directly instead.
 
+The online and offline sources are whatever `Trustall.numberSearch` and `Trustall.offlineDb` are configured with. If you register [custom number search providers](number-search.md#custom-providers) or a [custom offline database](offline-db.md#custom-provider), their results are what gets merged here.
+
 ```kotlin
 lifecycleScope.launch {
     Trustall.callerId.getNumberInfo("+886912345678").collect { state ->
@@ -149,7 +151,7 @@ Registers a callback to receive incoming and outgoing call events.
 fun getNumberInfo(number: String): Flow<NumberInfoState>
 ```
 
-Returns a `Flow` that emits number info progressively from three async sources: contact book, online search, and offline database. Emits `Loading` immediately, then `Partial` as each source returns, and finally `Finish` when all sources complete. Contact data is skipped if `READ_CONTACTS` is not granted.
+Returns a `Flow` that emits number info progressively from three async sources: contact book, online search (`Trustall.numberSearch`), and offline database (`Trustall.offlineDb`). Emits `Loading` immediately, then `Partial` as each source returns, and finally `Finish` when all sources complete. Contact data is skipped if `READ_CONTACTS` is not granted. Custom providers registered on Number Search or Offline DB are used here as well.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|

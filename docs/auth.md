@@ -1,6 +1,6 @@
 # Auth
 
-`Trustall.auth` (`TrustallAuth`) handles device registration and member ID management.
+`Trustall.auth` (`TrustallAuth`) handles device registration and member ID management. It ships in `trustall-core`; no separate dependency is needed.
 
 ## Register a Device
 
@@ -55,6 +55,8 @@ val region   = Trustall.auth.region    // Region from the last auth response
 val deviceId = Trustall.auth.deviceId  // Device identifier used for registration
 ```
 
+`deviceId` is the same value as `Trustall.deviceId`. To supply your own, see [Device ID](getting-started.md#device-id) — changing it discards the current registration and member ID, and the device registers again.
+
 ---
 
 ## API Reference
@@ -68,7 +70,7 @@ Access via `Trustall.auth`.
 | Name | Type | Description |
 |------|------|-------------|
 | `region` | `String` | Current region returned by the last auth response. |
-| `deviceId` | `String` | Device identifier used for registration. |
+| `deviceId` | `String` | Device identifier used for registration; same as `Trustall.deviceId`. |
 
 ### Functions
 

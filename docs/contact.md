@@ -66,7 +66,7 @@ Returns contacts whose phone numbers match the given E.164 number.
 |-----------|------|-------------|
 | `e164` | `String` | Phone number in E.164 format (e.g. `"+886912345678"`) |
 
-**Returns:** `List<`[`Contact`](#contact)`>`
+**Returns:** `List<`[`Contact`](#contact-1)`>`
 
 ---
 
@@ -78,7 +78,7 @@ suspend fun getAllContacts(): List<Contact>
 
 Returns all contacts that have at least one phone number.
 
-**Returns:** `List<`[`Contact`](#contact)`>`
+**Returns:** `List<`[`Contact`](#contact-1)`>`
 
 ---
 

@@ -81,6 +81,32 @@ val urls = Trustall.urlScan.extractUrls("check http://a.com and b.com/path")
 
 Pairs naturally with [SMS Flow](sms-flow.md) to scan every incoming SMS for malicious links.
 
+## Custom Providers
+
+Implement [`UrlScanProvider`](#urlscanprovider) to scan URLs against your own backend, and register it with [`setProviders()`](#setproviders) before `Trustall.initialize()`:
+
+```kotlin
+class MyProvider : UrlScanProvider {
+    override suspend fun scan(url: String, cachePolicy: CachePolicy): UrlScanResult? =
+        UrlScanResult.Success(url, myBackend.classify(url))
+}
+
+TrustallUrlScan.setProviders(listOf(MyProvider()))
+```
+
+How the list is consulted:
+
+- `scan()` asks each provider in order and returns the first `UrlScanResult.Success`.
+- A provider that returns `UrlScanResult.Error` or throws is skipped. The first such error is returned only if no later provider succeeds.
+- A provider that returns `null` does not cover that URL and is skipped without counting as an error. If no provider covers the URL, `scan()` returns an `Error` whose `error` is an `IllegalStateException`.
+- `cachePolicy` is passed through as the caller's request. The SDK keeps no cache in front of providers, so honour it if your provider caches.
+- To keep Gogolook's scanner as a fallback, put `TrustallUrlScan.defaultProvider` last.
+- `setProviders(null)` restores Gogolook's scanner as the only source. `setProviders(emptyList())` leaves no source, so every scan returns an `Error`.
+
+`scanText()` walks the same list once per URL, so anything built on it — such as scanning incoming messages from [SMS Flow](sms-flow.md) — uses your providers too. `extractUrls()` runs on the device and is unaffected.
+
+See [Custom Providers](getting-started.md#custom-providers) for the rules common to every provider.
+
 ---
 
 ## API Reference
@@ -140,6 +166,46 @@ Extracts URLs from the text via [`extractUrls()`](#extracturls) and scans them c
 **Returns:** `List<`[`UrlScanResult`](#urlscanresult)`>` — one result per distinct URL found; empty when the text contains no URL
 
 ---
+
+### Provider Configuration
+
+Companion members of `TrustallUrlScan`, called on the class rather than on `Trustall.urlScan`.
+
+#### `setProviders`
+
+```kotlin
+fun setProviders(providers: List<UrlScanProvider>?)
+```
+
+Sets the ordered list of providers used for scans, replacing any previous one. Takes effect from the next call.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `providers` | `List<UrlScanProvider>?` | Providers in priority order. `null` restores the built-in provider; an empty list leaves no source. |
+
+---
+
+#### `defaultProvider`
+
+```kotlin
+val defaultProvider: UrlScanProvider
+```
+
+The built-in Gogolook provider. Put it last in the list to keep it as a fallback.
+
+---
+
+### UrlScanProvider
+
+```kotlin
+interface UrlScanProvider {
+    suspend fun scan(url: String, cachePolicy: CachePolicy): UrlScanResult?
+}
+```
+
+| Function | Description |
+|----------|-------------|
+| `scan(url, cachePolicy)` | Returns `Success` to end the chain, `Error` to move on (returned if nothing later succeeds), or `null` when this provider does not cover the URL. |
 
 ### UrlScanResult
 
