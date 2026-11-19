@@ -107,7 +107,7 @@ class MyApp : Application() {
 The pages under `docs/` are the source of the Android section of the developer website. A workflow regenerates the website pages on every change to `docs/` on `master` and opens a pull request there, so edit the files here.
 
 - [Getting Started](docs/getting-started.md) — Installation, initialization, and SDK overview
-- [Auth](docs/auth.md) — Device registration and member ID management
+- [Auth](docs/auth.md) — Device registration
 - [Caller ID](docs/caller-id.md) — Call event callbacks and number info lookup
 - [Call Log](docs/call-log.md) — Call log retrieval and upload
 - [Contact](docs/contact.md) — Contact lookup by phone number

@@ -1,16 +1,16 @@
 # Auth
 
-`Trustall.auth` (`TrustallAuth`) handles device registration and member ID management. It ships in `trustall-core`; no separate dependency is needed.
+`Trustall.auth` (`TrustallAuth`) handles device registration. It ships in `trustall-core`; no separate dependency is needed.
 
 ## Register a Device
 
-Calling [`register()`](#register) is **optional** — the SDK will automatically register the device the first time any online feature is used. Call it explicitly only if you want to associate a `memberId` with the device upfront. If the `memberId` is not available at initialization time, you can also call [`setMemberId()`](#setmemberid) later.
+Calling [`register()`](#register) is **optional** — the SDK will automatically register the device the first time any online feature is used. Call it explicitly only if you want the device registered before the first online call.
 
 [`register()`](#register) is a `suspend` function and must be called from a coroutine. Call it after `Trustall.initialize()` completes:
 
 ```kotlin
 coroutineScope.launch {
-    when (val result = Trustall.auth.register(memberId = "user-123")) {
+    when (val result = Trustall.auth.register(memberId = "")) {
         is AuthResult.Success -> {
             // Registration successful
         }
@@ -27,23 +27,11 @@ coroutineScope.launch {
 }
 ```
 
-`memberId` is a custom identifier that lets you associate the device with a user in your own system (e.g. an account ID or username). If you don't need this, pass an empty string:
+## User ID
+
+[`getUserId()`](#getuserid) is a `suspend` function.
 
 ```kotlin
-Trustall.auth.register(memberId = "")
-```
-
-## Member ID Management
-
-[`setMemberId()`](#setmemberid), [`getMemberId()`](#getmemberid), and [`getUserId()`](#getuserid) are all `suspend` functions.
-
-```kotlin
-// Set member ID
-Trustall.auth.setMemberId("user-123")
-
-// Get stored member ID
-val memberId = Trustall.auth.getMemberId()
-
 // Get user ID from the latest auth response
 val userId = Trustall.auth.getUserId()
 ```
@@ -55,7 +43,7 @@ val region   = Trustall.auth.region    // Region from the last auth response
 val deviceId = Trustall.auth.deviceId  // Device identifier used for registration
 ```
 
-`deviceId` is the same value as `Trustall.deviceId`. To supply your own, see [Device ID](getting-started.md#device-id) — changing it discards the current registration and member ID, and the device registers again.
+`deviceId` is the same value as `Trustall.deviceId`. To supply your own, see [Device ID](getting-started.md#device-id) — changing it discards the current registration, and the device registers again.
 
 ---
 
@@ -80,37 +68,13 @@ Access via `Trustall.auth`.
 suspend fun register(memberId: String): AuthResult
 ```
 
-Registers the device with the given member ID. Calling this is optional — the SDK registers automatically the first time any online feature is used.
+Registers the device. Calling this is optional — the SDK registers automatically the first time any online feature is used.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `memberId` | `String` | Partner-assigned member identifier. Pass an empty string if not needed. |
+| `memberId` | `String` | Reserved. Pass an empty string. |
 
 **Returns:** [`AuthResult`](#authresult)
-
----
-
-#### `getMemberId`
-
-```kotlin
-suspend fun getMemberId(): String
-```
-
-Returns the stored member ID, or an empty string if not set.
-
----
-
-#### `setMemberId`
-
-```kotlin
-suspend fun setMemberId(memberId: String)
-```
-
-Stores the given member ID locally.
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `memberId` | `String` | Member ID to store. |
 
 ---
 
