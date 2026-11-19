@@ -207,7 +207,7 @@ Trustall.initialize(
 
 - The value must be exactly 32 lowercase hex characters (a UUID with the dashes removed). Anything else makes `initialize()` throw `IllegalArgumentException`.
 - The value is stored in place of the previous one. A later `initialize()` that leaves `deviceId` as `null` keeps using it.
-- The device ID changes when the app's data is cleared (a new random one is generated) or when a later `initialize()` supplies a different value. Either way the device registers again, and the previous registration's member ID is discarded.
+- The device ID changes when the app's data is cleared (a new random one is generated) or when a later `initialize()` supplies a different value. Either way the device registers again.
 - `initialize()` can be called again on a running SDK to adopt a new device ID without a relaunch. Other settings such as `isDebug` still require a relaunch.
 
 ## Custom Providers
